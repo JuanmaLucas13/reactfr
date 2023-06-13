@@ -1,0 +1,13 @@
+.container {
+    padding-inline-start: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(325px, 0.25fr));
+    grid-gap: 20px;
+    justify-content: center;
+    align-items: center;
+}
+
+.card {
+   border: 1px solid black;
+   border-radius: 25px;
+}
