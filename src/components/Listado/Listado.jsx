@@ -12,7 +12,6 @@ const Listado = () => {
   const [paisesContinente, setPaisesContinente] = useState([]);
   const [filtroPaises, setFiltroPaises] = useState([]);
 
-
   const handleFiltro = (ev) =>
   {
     let paisesFiltrados = [];
@@ -42,15 +41,20 @@ const Listado = () => {
       //   return config;
       // });
 
-      // const paisesApi = await axios.get("http://localhost:5201/paises")
-        const paisesApi = await axios.get(`${process.env.REACT_APP_BACK_URL}/paises`)
-
-        //const paisesApi = await API.get("/paises")
-        // .then ((res) => {console.log(res)}, (error) => {console.log(error)})
-
-        setPaises(paisesApi.data);
-        setPaisesContinente(paisesApi.data);
-        setFiltroPaises(paisesApi.data);
+        await axios.get(`${process.env.REACT_APP_BACK_URL}/paises`).then(
+          (resp) => {
+            setPaises(resp.data);
+            setPaisesContinente(resp.data);
+            setFiltroPaises(resp.data);
+          },
+          (error) => {
+            console.log(error);
+          }
+        ) 
+        // await API.get("/paises")
+        // .then((res) => {
+        //     console.log(res.data)
+        // })  
     };
 
     getPaises();
