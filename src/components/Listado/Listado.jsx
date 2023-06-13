@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
-// import { API } from "../../services/api";
+// import axios from "axios";
+import { API } from "../../services/api";
 import "./Listado.css"
 
 const Listado = () => {
@@ -41,9 +41,10 @@ const Listado = () => {
       // });
 
       // const paisesApi = await axios.get("http://localhost:5201/paises")
-        const paisesApi = await axios.get(`${process.env.REACT_APP_BACK_URL}/paises`)
+        // const paisesApi = await axios.get(`${process.env.REACT_APP_BACK_URL}/paises`)
 
-        // const paisesApi = await API.get("/paises")
+        const paisesApi = await API.get("/paises")
+         .then ((res) => {console.log(res)}, (error) => {console.log(error)})
 
         setPaises(paisesApi.data);
         setPaisesContinente(paisesApi.data);
