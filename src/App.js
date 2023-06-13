@@ -8,6 +8,7 @@ import Paginacion from '../src/components/Paginacion/Paginacion'
 import Login from '../src/components/Login/Login'
 import Juego from './components/Juego/Juego';
 import Favoritos from './components/Favoritos/Favoritos';
+import Detalle from './components/Detalle/Detalle';
 import AuthRoute from './components/AuthRoute/AuthRoute';
 
 function App() {
@@ -22,10 +23,10 @@ function App() {
     let responseStatus = 0;
 
     const data = {email: formData.email, password:formData.password};
-    const url = `https://prjreactbk-a0cxje6gg-juanmalucas13.vercel.app/user/login`
+    const url = `${process.env.REACT_APP_BACK_URL}/user/login`
 
     // Opciones por defecto estan marcadas con un *
-    const response = await fetch(url, {
+    await fetch(url, {
         method: 'POST', // *GET, POST, PUT, DELETE, etc.
         headers: {
            'Accept': 'application/json',
@@ -43,8 +44,9 @@ function App() {
     .then(auxdata => {
       if (responseStatus === 200)
        {
-         console.log(auxdata.token)
+         console.log(auxdata)
          localStorage.setItem('paisestoken', auxdata.token);
+         localStorage.setItem('paisesuser', auxdata.user._id);
 
          setLoginError('');
          navigate('/');
@@ -68,9 +70,9 @@ const registerUser = async (formData) => {
   let responseStatus = 0;
 
   const data = {email: formData.email, password:formData.password};
-  const url = `https://prjreactbk-a0cxje6gg-juanmalucas13.vercel.app/user/register`
+  const url = `${process.env.REACT_APP_BACK_URL}/user/register`
 
-  const response = await fetch(url, {
+  await fetch(url, {
     method: 'POST', // *GET, POST, PUT, DELETE, etc.
     headers: {
       'Accept': 'application/json',
@@ -111,6 +113,8 @@ const registerUser = async (formData) => {
        <Route path= '/listadoPaginado' element = {
               <AuthRoute component={<Paginacion />} />
           } />
+       <Route path= '/detalle/:idPais' element={<Detalle/>} />
+          
        <Route path= '/favoritos' element = {
               <AuthRoute component={<Favoritos />} />
           } />

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import "../Listado/Listado.css"
+import { Link } from "react-router-dom"
 
 const Paginacion = () => {
   const [paisesPag, setPaisesPag] = useState([]);
@@ -9,6 +10,37 @@ const Paginacion = () => {
   const [nextPage, setNextPage] = useState('');
   const [previousPage, setPreviousPage] = useState('');
   const [paginaAct, setPaginaAct] = useState('/Paginacion');
+
+  const addFavorite1 = async (id) => {
+      let responseStatus = 0;
+
+      const data = {userfav: localStorage.getItem('paisesuser'), paisfav:id};
+      const url = `${process.env.REACT_APP_BACK_URL}/favoritos`
+    
+      await fetch(url, {
+        method: 'POST', // *GET, POST, PUT, DELETE, etc.
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data) // body data type must match "Content-Type" header
+      })
+      .then (response => {
+        responseStatus = response.status;
+        return response.json() 
+      })
+      .catch((error) => {
+        console.log(' error petición Fetch:' + error.message)}
+      )
+      .then(auxdata => {
+        if (responseStatus === 201)
+         {
+         }  
+      })
+      .catch(error => {
+         console.log('Hubo un problema con la petición Fetch:' + error.message)
+      });
+    };
 
   const handlePreviousPage = () => {
     if (page > 1) {
@@ -57,6 +89,12 @@ const Paginacion = () => {
                  <img src={character.flags.svg} height = '20px' widht = '20px' alt='{character.namecommon}'/>
                  <h2>{character.namecommon}</h2>
                  <p> {character.region} </p>
+
+                 <Link to={`/detalle/${character._id}`} >Detalle</Link>  
+
+                 <button onClick={() => {
+                    addFavorite1(character._id)}}>Añadir Favorito</button>
+
             </li>
 
           ))}

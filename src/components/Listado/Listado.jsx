@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 // import { API } from "../../services/api";
 
+import { Link } from "react-router-dom"
 import "./Listado.css"
 
 const Listado = () => {
@@ -11,6 +12,39 @@ const Listado = () => {
   const [paises, setPaises] = useState([]);
   const [paisesContinente, setPaisesContinente] = useState([]);
   const [filtroPaises, setFiltroPaises] = useState([]);
+
+  const addFavorite = async (id) => {
+    let responseStatus = 0;
+
+    localStorage.getItem('paisesuser');
+
+    const data = {userfav: localStorage.getItem('paisesuser'), paisfav:id};
+    const url = `${process.env.REACT_APP_BACK_URL}/favoritos`
+  
+    await fetch(url, {
+      method: 'POST', // *GET, POST, PUT, DELETE, etc.
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data) // body data type must match "Content-Type" header
+    })
+    .then (response => {
+      responseStatus = response.status;
+      return response.json() 
+    })
+    .catch((error) => {
+      console.log(' error petición Fetch:' + error.message)}
+    )
+    .then(auxdata => {
+      if (responseStatus === 201)
+       {
+       }  
+    })
+    .catch(error => {
+       console.log('Hubo un problema con la petición Fetch:' + error.message)
+    });
+  }
 
   const handleFiltro = (ev) =>
   {
@@ -88,7 +122,7 @@ const Listado = () => {
           <option value="North America">America del Norte</option>
           <option value="South America">America del Sur</option>
           <option value="Oceania">Oceania</option>
-          <option value="Antarctica">Antarctica</option>
+          <option value="Antarctica">Antartida</option>
           
         </select>
 
@@ -100,8 +134,12 @@ const Listado = () => {
                  <img src={character.flags.svg} height = '20px' widht = '20px' alt='{character.namecommon}'/>
                  <h2>{character.namecommon}</h2>
                  <p> {character.region} </p>
-            </li>
 
+                 <Link to={`/detalle/${character._id}`} >Detalle</Link>
+
+                 <button onClick={() => {
+                    addFavorite(character._id)}}>Añadir Favorito</button>
+            </li>
           ))}
         </ul>
         </>
