@@ -1,4 +1,6 @@
 import axios from "axios";
+// import { API } from "../../services/api";
+
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 
@@ -9,8 +11,6 @@ const Favoritos = (id) => {
   const [msgError, setMsgError] = useState([]);
 
   const delFavorite = async (id) => {
-    let responseStatus = 0;
-
     const url = `${process.env.REACT_APP_BACK_URL}/favoritos/${id}`
   
     await fetch(url, {
@@ -21,7 +21,6 @@ const Favoritos = (id) => {
       }
     })
     .then (response => {
-      responseStatus = response.status;
       return response.json() 
     })
     .catch((error) => {
@@ -59,6 +58,11 @@ const Favoritos = (id) => {
             // console.log(resp.response.data);
           }
         ) 
+
+        // await API.get(`/favoritos/${id}`)
+        // .then((res) => {
+        //     console.log(res.data)
+        //})  
     };
 
     getPaises();
@@ -75,7 +79,7 @@ const Favoritos = (id) => {
                  <h2>{character.paisfav.namecommon}</h2>
                  <p> {character.paisfav.region} </p>
 
-                 <Link to={`/detalle/${character._id}`} >Detalle</Link>
+                 <Link to={`/detalle/${character.paisfav._id}`} >Detalle</Link>
 
                  <button onClick={() => {
                     delFavorite(character._id)}}>Eliminar Favorito</button>
@@ -87,7 +91,7 @@ const Favoritos = (id) => {
         (errorPag === 1 ?
           
           <div className="card">
-           <p>No hay favoritos seleccionados</p>
+           <p>{msgError}</p>
           </div>
         :
         <div className="card">

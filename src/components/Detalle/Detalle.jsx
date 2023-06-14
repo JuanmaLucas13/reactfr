@@ -4,15 +4,24 @@ import axios from "axios";
 
 const Detalle = () => {
   const { idPais } = useParams()
+
   const [pais, setPais] = useState({});
+  const [arrayLeng, setArrayLeng] = useState([]);
+  let arrayLenguajes = [];
 
   useEffect(() => {
     const getPaisbyId = async () => {
-
-    await axios.get(`${process.env.REACT_APP_BACK_URL}/paises/pais/${idPais}`).then(
+        await axios.get(`${process.env.REACT_APP_BACK_URL}/paises/pais/${idPais}`).then(
           (resp) => {
-            console.log(resp)
+            // console.log(resp)
             setPais(resp.data)
+           
+            for (const key in resp.data.languages) {
+              arrayLenguajes.push(resp.data.languages[key]);
+            }
+
+            setArrayLeng(arrayLenguajes);
+            // console.log(arrayLenguajes)
           },
           (resp) => {
             // console.log(resp.response.data);
@@ -27,7 +36,6 @@ const Detalle = () => {
     <div>
       {pais.namecommon ? (
         <>
-        {console.log(pais)}
         <ul className="container">
             <li key={pais._id} className="card">
                 <h2>{pais.namecommon}</h2>
@@ -39,7 +47,7 @@ const Detalle = () => {
                 <p>Poblacion: {pais.population}</p>
                 <p>Independiente: {pais.independent ? 'Si' : 'No'}</p>
                 <p>Fronteras con: {pais.borders.map((eachborder) => eachborder + ' ' )  }</p>
-
+                <p>lenguajes oficiales: {arrayLeng.map((eachLang) => eachLang + ' ' ) }</p>
             </li>
         </ul>
         </>

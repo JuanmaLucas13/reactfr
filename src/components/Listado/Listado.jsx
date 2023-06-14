@@ -9,6 +9,8 @@ import "./Listado.css"
 const Listado = () => {
 
   const [filtroContinente, setfiltroContinente] = useState('');
+  const [filtroBusqueda, setfiltroBusqueda] = useState('');
+
   const [paises, setPaises] = useState([]);
   const [paisesContinente, setPaisesContinente] = useState([]);
   const [filtroPaises, setFiltroPaises] = useState([]);
@@ -63,7 +65,8 @@ const Listado = () => {
         )  
      }
 
-     setFiltroPaises ([...paisesFiltrados]     )  
+     setfiltroBusqueda(ev.target.value);
+     setFiltroPaises ([...paisesFiltrados])  
  } 
 
   useEffect(() => {
@@ -106,11 +109,9 @@ const Listado = () => {
       setFiltroPaises ([...paisesFiltrados]     )  
   }
 
-
   return (
-    <div>
-      {filtroPaises.length ? (
-        <>
+    <>
+      <div>
         <label htmlFor="filtro">Filtro por Pais</label>
         <input type="text" id="filtro" name="filtro" onChange={handleFiltro} />
 
@@ -125,9 +126,11 @@ const Listado = () => {
           <option value="Antarctica">Antartida</option>
           
         </select>
-
-        <br />
-
+      </div>
+      <br />
+      <div>
+      {filtroPaises.length ? (
+        <>
         <ul className="container">
           {filtroPaises.map((character, i) => (
             <li key={i} className="card">
@@ -143,13 +146,22 @@ const Listado = () => {
           ))}
         </ul>
         </>
-      ) : (
-        <div className="card">
-           <img src="./GIF_Mundo_Banderas.gif" height = '100px' widht = '100px' alt='loading'/>
-           <p>Recuperando paises</p>
-        </div>
-      )}
-    </div>
+       ) : (
+        <>
+        { filtroBusqueda ? 
+          <div className="card">
+             <p>No existen paises con el patron informado</p>
+           </div>
+          :
+          <div className="card">
+             <img src="./GIF_Mundo_Banderas.gif" height = '100px' widht = '100px' alt='loading'/>
+             <p>Recuperando paises</p>
+           </div>
+        }
+        </>
+       )}
+      </div>
+    </>  
   )
 }
 
